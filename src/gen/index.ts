@@ -4,7 +4,20 @@ import fp from 'lodash/fp';
 import { compose } from '../utils';
 import { generateProject } from './generateProject';
 
+function generateModule() {
 
+}
+function generatePage() {
+
+}
+
+function generateComponent() {
+
+}
+
+
+
+// 选择类型
 async function chooseType() {
   return await prompt({
     type: 'list',
@@ -15,6 +28,7 @@ async function chooseType() {
   });
 }
 
+// 根据type执行动作
 async function typeAction({type}: any) {
   if (type === 'project') {
     await generateProject();
@@ -27,17 +41,7 @@ async function typeAction({type}: any) {
   }
 }
 
-function generateModule() {
-
-}
-function generatePage() {
-
-}
-
-function generateComponent() {
-
-}
-
+// 生成命令
 export const gen = compose(chooseType, typeAction);
 
 

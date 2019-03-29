@@ -1,20 +1,24 @@
 import { compose } from '../utils';
 
+// 加载模板，返回模板数据
 function loadTemplates() {
 
 }
-
+// 根据模板数据，显示列表，返回用户选择的模板
 function chooseTemplate() {
 
 }
-
+// 显示模板的定制选项
 function templateOption() {
 
 }
-
+// 生成代码
 function generate() {
 
 }
+
+
+// 生成项目
 export const generateProject = compose(
   loadTemplates,
   chooseTemplate,
