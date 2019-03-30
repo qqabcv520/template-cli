@@ -39,7 +39,13 @@
         "comment-format": [
             true,
             "check-space"
-        ]
+        ],
+        // 限制换行符为 LF 或 CRLF
+        "linebreak-style": [
+            true,
+            "CRLF"
+        ],
+        "arrow-parens": false
     },
     "rulesDirectory": [
         "node_modules/tslint-eslint-rules/dist/rules"

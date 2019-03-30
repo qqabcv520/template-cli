@@ -13,5 +13,3 @@ program
   .action(gen);
 
 program.parse(process.argv);
-
-
