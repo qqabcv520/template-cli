@@ -1,11 +1,15 @@
-import { compose } from '../utils';
+import ora from 'ora';
+import { asyncPipe } from '../../utils';
 
 // 加载模板，返回模板数据
-function loadTemplates() {
+async function loadTemplates(): Promise<any[]> {
+
+
+    return [];
 
 }
 // 根据模板数据，显示列表，返回用户选择的模板
-function chooseTemplate() {
+function chooseTemplate(templates: any[]) {
 
 }
 // 显示模板的定制选项
@@ -13,18 +17,28 @@ function templateOption() {
 
 }
 // 生成代码
-function generate() {
+function generateFile() {
 
 }
 
+const generate = asyncPipe(
+    loadTemplates,
+    chooseTemplate,
+    templateOption,
+    generateFile
+);
 
 // 生成项目
-export const generateProject = compose(
-  loadTemplates,
-  chooseTemplate,
-  templateOption,
-  generate
-);
+export async function generateProject() {
+    const spinner = ora('正在生成项目').start();
+    try {
+        await generate();
+        spinner.succeed('生成完成');
+    } catch (e) {
+        spinner.fail('生成失败');
+        console.error(e);
+    }
+}
 
 
 // const question: inquirer.Questions = [
