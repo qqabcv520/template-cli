@@ -49,11 +49,19 @@ function asyncPipe(...functions) {
         return nextArgs[0];
     });
 }
+function sleep(t) {
+    return new Promise((resolve) => {
+        const timer = setTimeout(() => {
+            resolve(timer);
+        }, t);
+    });
+}
 //# sourceMappingURL=utils.js.map
 
 // 加载模板，返回模板数据
 function loadTemplates() {
     return __awaiter(this, void 0, void 0, function* () {
+        yield sleep(10000);
         return [];
     });
 }
@@ -70,7 +78,7 @@ const generate = asyncPipe(loadTemplates, chooseTemplate, templateOption, genera
 // 生成项目
 function generateProject() {
     return __awaiter(this, void 0, void 0, function* () {
-        const spinner = ora('正在生成项目').start();
+        const spinner = ora('Loading...').start();
         try {
             yield generate();
             spinner.succeed('生成完成');
@@ -149,9 +157,11 @@ function chooseType() {
     });
 }
 // 根据type执行动作
-function typeAction({ type }) {
+function typeAction([{ type }]) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(type);
         if (type === 'project') {
+            console.log(100);
             yield generateProject();
         }
         else if (type === 'module') {
@@ -166,7 +176,10 @@ function typeAction({ type }) {
     });
 }
 // 生成命令
-const gen = asyncPipe(chooseType, typeAction);
+function gen() {
+    return asyncPipe(chooseType, typeAction);
+}
+//# sourceMappingURL=index.js.map
 
 program
     .version(require('../package.json').version, '-v, --version') // tslint:disable-line
