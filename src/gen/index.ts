@@ -29,8 +29,10 @@ async function chooseType() {
 }
 
 // 根据type执行动作
-async function typeAction({type}: any) {
+async function typeAction([{type}]: any) {
+    console.log(type);
     if (type === 'project') {
+        console.log(100);
         await generateProject();
     } else if (type === 'module') {
         await generateModule();
@@ -43,9 +45,10 @@ async function typeAction({type}: any) {
 
 }
 
-
 // 生成命令
-export const gen = asyncPipe(chooseType, typeAction);
+export function gen() {
+    return asyncPipe(chooseType, typeAction);
+}
 
 
 // console.log('生成中...');
