@@ -4,8 +4,9 @@
   "description": "api generator",
   "main": "index.js",
   "bin": {
-    "bgt": "bin/bgt.js"
+    "tpl": "bin/tpl.js"
   },
+  "schematics": "./src/generate/template/collection.json",
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rollup -c"
@@ -19,7 +20,7 @@
   "license": "MIT",
   "files": [
     "dist/index.js",
-    "bin/bgt.js",
+    "bin/tpl.js",
     "template"
   ],
   "devDependencies": {
@@ -40,6 +41,10 @@
     "typescript": "~3.4.1"
   },
   "dependencies": {
+    "@angular-devkit/core": "^7.3.8",
+    "@angular-devkit/schematics": "^7.3.8",
+    "@angular/cdk": "^7.3.7",
+    "@schematics/angular": "^7.3.8",
     "axios": "~0.18.0",
     "commander": "~2.19.0",
     "core-js": "~2.6.3",
@@ -47,6 +52,7 @@
     "fs-extra": "~7.0.1",
     "inquirer": "~6.2.2",
     "lodash": "~4.17.11",
-    "ora": "^3.2.0"
+    "ora": "^3.2.0",
+    "symbol-observable": "^1.2.0"
   }
 }

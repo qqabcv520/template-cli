@@ -1,15 +1,16 @@
 import program from 'commander';
 // tslint:disable-next-line
 import 'core-js/es7/array';
-import { gen } from './gen';
+import { generate } from './generate';
 
 program
     .version(require('../package.json').version, '-v, --version')  // tslint:disable-line
     .usage('<command> [options]');
 
 program
-    .command('gen')
+    .command('generate')
+    .alias('g')
     .description('generate a new project or module or component.')
-    .action(gen);
+    .action(generate);
 
 program.parse(process.argv);

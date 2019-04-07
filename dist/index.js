@@ -4,9 +4,14 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var program = _interopDefault(require('../node_modules/commander/index.js'));
 require('../node_modules/core-js/es7/array.js');
-require('fs-extra');
 var inquirer = require('inquirer');
 var ora = _interopDefault(require('ora'));
+require('fs-extra');
+require('symbol-observable');
+var core = require('@angular-devkit/core');
+var node = require('@angular-devkit/core/node');
+var schematics = require('@angular-devkit/schematics');
+var tools = require('@angular-devkit/schematics/tools');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -32,14 +37,13 @@ function __awaiter(thisArg, _arguments, P, generator) {
     });
 }
 
-//
 // 包含Promise异步情况的Pipe
 function asyncPipe(...functions) {
     return (...args) => __awaiter(this, void 0, void 0, function* () {
         let nextArgs = args;
         for (const func of functions) {
-            const result = func(nextArgs);
-            if (Promise != undefined && result instanceof Promise) {
+            const result = func(...nextArgs);
+            if (result instanceof Promise) {
                 nextArgs = [yield result];
             }
             else {
@@ -49,38 +53,119 @@ function asyncPipe(...functions) {
         return nextArgs[0];
     });
 }
-function sleep(t) {
-    return new Promise((resolve) => {
-        const timer = setTimeout(() => {
-            resolve(timer);
-        }, t);
-    });
-}
 //# sourceMappingURL=utils.js.map
 
-// 加载模板，返回模板数据
-function loadTemplates() {
+function createPromptProvider() {
+    return (definitions) => {
+        const questions = definitions.map(definition => {
+            const question = {
+                name: definition.id,
+                message: definition.message,
+                default: definition.default,
+            };
+            const validator = definition.validator;
+            if (validator) {
+                question.validate = input => validator(input);
+            }
+            switch (definition.type) {
+                case 'confirmation':
+                    return Object.assign({}, question, { type: 'confirm' });
+                case 'list':
+                    return Object.assign({}, question, { type: !!definition.multiselect ? 'checkbox' : 'list', choices: definition.items && definition.items.map(item => {
+                            if (typeof item == 'string') {
+                                return item;
+                            }
+                            else {
+                                return {
+                                    name: item.label,
+                                    value: item.value,
+                                };
+                            }
+                        }) });
+                default:
+                    return Object.assign({}, question, { type: definition.type });
+            }
+        });
+        return inquirer.prompt(questions);
+    };
+}
+function runSchematic(collectionName, schematicName, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield sleep(10000);
-        return [];
+        /** Create a Virtual FS Host scoped to where the process is being run. */
+        const fsHost = new core.virtualFs.ScopedHost(new node.NodeJsSyncHost(), core.normalize(process.cwd()));
+        /** Create the workflow that will be executed with this run. */
+        const workflow = new tools.NodeWorkflow(fsHost, {});
+        workflow.reporter.subscribe((event) => {
+            console.log(event);
+        });
+        workflow.lifeCycle.subscribe(event => {
+            console.log(event);
+        });
+        // Add prompts.
+        workflow.registry.usePromptProvider(createPromptProvider());
+        return yield workflow.execute({
+            collection: collectionName,
+            schematic: schematicName,
+            options,
+        }).toPromise();
     });
 }
-// 根据模板数据，显示列表，返回用户选择的模板
-function chooseTemplate(templates) {
+function createCollection(collectionName) {
+    const engineHost = new tools.NodeModulesEngineHost();
+    const engine = new schematics.SchematicEngine(engineHost);
+    return engine.createCollection(collectionName);
+}
+// 加载模板，返回模板数据
+function loadTemplates(collectionName, schematicFilter) {
+    const collection = createCollection(collectionName);
+    return () => __awaiter(this, void 0, void 0, function* () {
+        return collection
+            .listSchematicNames()
+            .filter(schematicFilter)
+            .map(value => collection.createSchematic(value))
+            .map(value => {
+            const a = value.description;
+            const b = value.collection;
+            console.log(a);
+            console.log(b);
+            debugger;
+            return {
+                name: value.description.name,
+                run: (option) => __awaiter(this, void 0, void 0, function* () { return yield runSchematic(value.collection.description.name, value.description.name, option); }),
+                questions: value.description.schemaJson,
+            };
+        });
+    });
 }
 // 显示模板的定制选项
-function templateOption() {
+function templateOption(template) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(template.questions);
+        debugger;
+        const option = {};
+        return { template, option };
+    });
+}
+//# sourceMappingURL=schematics-impl.js.map
+
+// 根据模板数据，显示列表，返回用户选择的模板
+function chooseTemplate(templates) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { templateName } = yield inquirer.prompt({
+            type: 'list',
+            name: 'templateName',
+            message: '请选择需要生成的模板',
+            choices: templates.map(value => value.name),
+        });
+        return templates.find(value => value.name === templateName);
+    });
 }
 // 生成代码
-function generateFile() {
-}
-const generate = asyncPipe(loadTemplates, chooseTemplate, templateOption, generateFile);
-// 生成项目
-function generateProject() {
+function generateFile({ template, option }) {
     return __awaiter(this, void 0, void 0, function* () {
         const spinner = ora('Loading...').start();
         try {
-            yield generate();
+            yield template.run(option);
             spinner.succeed('生成完成');
         }
         catch (e) {
@@ -89,80 +174,34 @@ function generateProject() {
         }
     });
 }
-// const question: inquirer.Questions = [
-//   // {
-//   //   type: 'input',
-//   //   name: 'appName',
-//   //   required: true,
-//   //   message: '请输入项目名称',
-//   //   validate: (input: string): string | boolean => {
-//   //     if (isFileNameValid(input)) {
-//   //       return '文件命名不能包含\/:*?<>|';
-//   //     }
-//   //     if (isFileNameExcessLimit(input)) {
-//   //       return '文件名不能超过255位';
-//   //     }
-//   //     if (isFileNameNameRep(input)) {
-//   //       return '文件命名重复,请重新命名';
-//   //     }
-//   //     if (input || input.length) {
-//   //       return true;
-//   //     }
-//   //   }
-//   // },
-//   {
-//     type: 'list',
-//     name: 'projectTemplate',
-//     message: '请选择需要创建模板类型',
-//     choices: ['project', 'module', 'page', 'component'],
-//     default: 'project'
-//   },
-//   {
-//     type: 'input',
-//     name: 'projectDesc',
-//     message: 'Please input project description:'
-//   },
-//   {
-//     type: 'input',
-//     name: 'projectMain',
-//     message: 'Main file (index.js):',
-//     default: 'index.js'
-//   },
-//   {
-//     type: 'input',
-//     name: 'projectAuthor',
-//     message: 'Author (other):',
-//     default: 'other she'
-//   }
-// ];
-
 function generateModule() {
     return __awaiter(this, void 0, void 0, function* () {
     });
 }
-function generatePage() {
-}
 function generateComponent() {
+    return __awaiter(this, void 0, void 0, function* () {
+    });
 }
+const generatePage = asyncPipe(loadTemplates('.', schematicName => schematicName.endsWith('-page')), chooseTemplate, templateOption, generateFile);
 // 选择类型
 function chooseType() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield inquirer.prompt({
+        const { type } = yield inquirer.prompt({
             type: 'list',
             name: 'type',
-            message: '请选择需要创建模板类型',
+            message: '请选择需要生成的模板类型',
             choices: ['project', 'module', 'page', 'component'],
-            default: 'project'
+            default: 'project',
         });
+        return type;
     });
 }
 // 根据type执行动作
-function typeAction([{ type }]) {
+function typeAction(type) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(type);
         if (type === 'project') {
-            console.log(100);
-            yield generateProject();
+            yield generatePage();
+            //await generateProject();
         }
         else if (type === 'module') {
             yield generateModule();
@@ -176,17 +215,15 @@ function typeAction([{ type }]) {
     });
 }
 // 生成命令
-function gen() {
-    return asyncPipe(chooseType, typeAction);
-}
-//# sourceMappingURL=index.js.map
+const generate = asyncPipe(chooseType, typeAction);
 
 program
     .version(require('../package.json').version, '-v, --version') // tslint:disable-line
     .usage('<command> [options]');
 program
-    .command('gen')
+    .command('generate')
+    .alias('g')
     .description('generate a new project or module or component.')
-    .action(gen);
+    .action(generate);
 program.parse(process.argv);
 //# sourceMappingURL=main.js.map
