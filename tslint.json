@@ -45,7 +45,16 @@
             true,
             "CRLF"
         ],
-        "arrow-parens": false
+        // 箭头函数的参数必须有小括号
+        "arrow-parens": false,
+        // 限制对象、数组、解构赋值等的最后一项末尾是否需要逗号
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
+        ]
     },
     "rulesDirectory": [
         "node_modules/tslint-eslint-rules/dist/rules"

@@ -1,5 +1,5 @@
 import ora from 'ora';
-import { asyncPipe, sleep } from '../../utils';
+import { asyncPipe, sleep } from '../../utils/utils';
 
 // 加载模板，返回模板数据
 async function loadTemplates(): Promise<any[]> {
@@ -25,7 +25,7 @@ const generate = asyncPipe(
     loadTemplates,
     chooseTemplate,
     templateOption,
-    generateFile
+    generateFile,
 );
 
 // 生成项目
