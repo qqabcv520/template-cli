@@ -31,18 +31,13 @@ async function generateFile({template, option}: {template: Template; option: any
     console.error(e);
   }
 }
-async function generateProject() {
-}
 async function generateModule() {
 }
 
-async function generateComponent() {
 
-}
+const generateComponent = asyncPipe(
 
-const generatePage = asyncPipe(
-
-  loadTemplates('.', schematicName => schematicName.endsWith('-page')),
+  loadTemplates('template-cli-schematics-sales', schematicName => schematicName.endsWith('-component')),
   chooseTemplate,
   templateOption,
   generateFile,
@@ -55,21 +50,16 @@ async function chooseType() {
     type: 'list',
     name: 'type',
     message: '请选择需要生成的模板类型',
-    choices: ['project', 'module', 'page', 'component'],
-    default: 'project',
+    choices: ['module', 'component'],
+    default: 'module',
   });
   return type;
 }
 
 // 根据type执行动作
 async function typeAction(type: string) {
-  if (type === 'project') {
-    await generatePage();
-    // await generateProject();
-  } else if (type === 'module') {
+  if (type === 'module') {
     await generateModule();
-  } else if (type === 'page') {
-    await generatePage();
   } else if (type === 'component') {
     await generateComponent();
   }

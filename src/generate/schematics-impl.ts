@@ -98,15 +98,14 @@ export function loadTemplates(
   schematicFilter: (schematicName: string) => boolean,
 ): () => Promise<Template[]> {
   const collection = createCollection(collectionName);
+  console.log(collection.listSchematicNames());
   return async () => {
     return collection
       .listSchematicNames()
       .filter(schematicFilter)
       .map(value => collection.createSchematic(value))
       .map(value => {
-        console.log(collection.listSchematicNames());
-        console.log(value);
-        console.log('-------------------------------');
+
         const a = value.description;
         const b = value.collection;
         debugger;
