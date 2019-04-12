@@ -54,7 +54,8 @@
                 "multiline": "always",
                 "singleline": "never"
             }
-        ]
+        ],
+        "ordered-imports": false
     },
     "rulesDirectory": [
         "node_modules/tslint-eslint-rules/dist/rules"
