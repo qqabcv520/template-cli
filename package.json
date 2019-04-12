@@ -6,7 +6,6 @@
   "bin": {
     "tpl": "bin/tpl.js"
   },
-  "schematics": "./src/generate/template/collection.json",
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rollup -c"
@@ -43,7 +42,6 @@
   "dependencies": {
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
-    "@angular/cdk": "^7.3.7",
     "@schematics/angular": "^7.3.8",
     "axios": "~0.18.0",
     "commander": "~2.19.0",
