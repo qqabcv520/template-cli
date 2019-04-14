@@ -67,6 +67,7 @@ export const loadTemplates = _.curry((
   collectionNames: string | string[],
 ): Template[] => {
   const collectionNameArr = Array.isArray(collectionNames) ? collectionNames : [collectionNames];
+  // TODO try/catch createCollection报错
   const collections = collectionNameArr.map(value => createCollection(value));
   return collections.flatMap(value => {
     return value.listSchematicNames()
