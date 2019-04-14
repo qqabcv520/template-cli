@@ -1,4 +1,5 @@
-import fse from 'fs-extra';
+import * as path from 'path';
+import { existsSync } from 'fs';
 
 
 export function asyncPipe<R1, R2>(f1: () => R1 | Promise<R1>, f2: (a: R1) => R2 | Promise<R2>): () => Promise<R2>;
@@ -74,21 +75,21 @@ export function sleep(t: number) {
   });
 }
 
-function isFileNameValid(filename: string) {
-  return /\/|\|<|>|\*|\?/.test(filename);
-}
 
-function isFileNameExcessLimit(filename: string) {
-  return filename.length > 2 << 8; // 2的8次方
-}
+export function findUp(names: string | string[], from: string) {
+  const nameArr = Array.isArray(names) ? names : [names];
+  const root = path.parse(from).root;
 
-function isFileNameNameRep(filename: string) {
-  const path = process.cwd();
-  let files = fse.readdirSync(path);
-  return files.some((f_name) => f_name === filename);
-}
+  let currentDir = from;
+  while (currentDir && currentDir !== root) {
+    for (const name of nameArr) {
+      const p = path.join(currentDir, name);
+      if (existsSync(p)) {
+        return p;
+      }
+    }
+    currentDir = path.dirname(currentDir);
+  }
 
-function isFileNameStat(file: string) {
-  return fse.statSync(file);
+  return null;
 }
-
