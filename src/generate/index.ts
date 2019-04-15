@@ -1,14 +1,16 @@
 import { prompt, Questions } from 'inquirer';
 import ora from 'ora';
-import { asyncPipe, findUp } from '../utils/utils';
-import { JsonObject, normalize, virtualFs } from '@angular-devkit/core';
+import * as path from 'path';
+import { asyncPipe, findUp, findWorkspaceRoot } from '../utils/utils';
+import { json, JsonObject, normalize, virtualFs } from '@angular-devkit/core';
 import { NodeJsSyncHost } from '@angular-devkit/core/node';
 import { NodeModulesEngineHost, NodeWorkflow } from '@angular-devkit/schematics/tools';
 import { DryRunEvent, SchematicEngine } from '@angular-devkit/schematics';
 import * as _ from 'lodash/fp';
 import { readdir } from 'fs-extra';
 
-export const PLUGIN_PREFIX = 'template-cli-schematics-';
+const PLUGIN_PREFIX = 'template-cli-schematics-';
+const WORK_PATH = process.cwd();
 
 export interface JsonSchema extends JsonObject {
   $schema: string;
@@ -36,10 +38,9 @@ export interface Template {
 
 // 运行Schematic
 export async function runSchematic(collectionName: string, schematicName: string, options: any): Promise<void> {
-
-  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(process.cwd()));
+  const root = findWorkspaceRoot(WORK_PATH);
+  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(root));
   const workflow = new NodeWorkflow(fsHost, {});
-
   workflow.reporter.subscribe((event: DryRunEvent) => {
     // console.log(event);
   });
@@ -67,8 +68,15 @@ export const loadTemplates = _.curry((
   collectionNames: string | string[],
 ): Template[] => {
   const collectionNameArr = Array.isArray(collectionNames) ? collectionNames : [collectionNames];
-  // TODO try/catch createCollection报错
-  const collections = collectionNameArr.map(value => createCollection(value));
+  const collections = collectionNameArr
+    .map(value => {
+      try {
+        return createCollection(value);
+      } catch (e) {
+        return null;
+      }
+    })
+    .filter(value => value);
   return collections.flatMap(value => {
     return value.listSchematicNames()
       .filter(schematicFilter)
@@ -83,6 +91,7 @@ export const loadTemplates = _.curry((
       });
   });
 });
+
 
 async function questionFromSchema(json: JsonSchema) {
   const requiredProperties = Object.entries(json.properties)
@@ -132,7 +141,11 @@ async function questionFromSchema(json: JsonSchema) {
 
 // 显示模板的定制选项
 export async function templateOption(template: Template): Promise<{ template: Template; option: any }> {
-  const option = await questionFromSchema(template.schemaJson);
+  const asnwer = await questionFromSchema(template.schemaJson);
+  const option = {
+    ...asnwer,
+    __workPath: normalize(path.relative(findWorkspaceRoot(WORK_PATH), WORK_PATH)),
+  };
   return {template, option};
 }
 
@@ -182,7 +195,7 @@ const generateComponent = asyncPipe(
 
 // 加载插件
 export async function loadPlugins() {
-  const packagePath = findUp(['node_modules'], process.cwd());
+  const packagePath = findUp(['node_modules'], WORK_PATH);
   const dirs = await readdir(packagePath);
   return dirs.filter(value => value.startsWith(PLUGIN_PREFIX));
 }
