@@ -1,6 +1,6 @@
 {
   "name": "template-generate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "template generate",
   "main": "index.js",
   "bin": {
@@ -42,10 +42,8 @@
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
     "@schematics/angular": "^7.3.8",
-    "axios": "~0.18.0",
     "commander": "~2.19.0",
     "core-js": "~2.6.3",
-    "ejs": "~2.6.1",
     "fs-extra": "~7.0.1",
     "inquirer": "~6.2.2",
     "lodash": "~4.17.11",
