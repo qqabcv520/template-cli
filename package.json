@@ -13,14 +13,13 @@
   "keywords": [
     "generator",
     "generate",
-    "api"
+    "template"
   ],
   "author": "mifan",
   "license": "MIT",
   "files": [
     "dist/index.js",
-    "bin/tpl.js",
-    "template"
+    "bin/tpl.js"
   ],
   "devDependencies": {
     "@types/core-js": "~2.5.0",
