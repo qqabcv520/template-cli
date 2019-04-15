@@ -3,6 +3,7 @@ import program from 'commander';
 import 'core-js/es7/array';
 import { generate } from './generate';
 
+
 program
   .version(require('../package.json').version, '-v, --version')  // tslint:disable-line
   .usage('<command> [options]');
@@ -14,3 +15,4 @@ program
   .action(generate);
 
 program.parse(process.argv);
+

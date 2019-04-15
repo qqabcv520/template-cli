@@ -90,6 +90,12 @@ export function findUp(names: string | string[], from: string) {
     }
     currentDir = path.dirname(currentDir);
   }
-
   return null;
 }
+
+
+export function findWorkspaceRoot(currPath: string) {
+  const packagePath = findUp(['node_modules'], currPath);
+  return path.join(packagePath, '..');
+}
+

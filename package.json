@@ -1,7 +1,7 @@
 {
-  "name": "api-service-generator",
+  "name": "template-generate",
   "version": "0.0.1",
-  "description": "api generator",
+  "description": "template generate",
   "main": "index.js",
   "bin": {
     "tpl": "bin/tpl.js"
@@ -43,7 +43,6 @@
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
     "@schematics/angular": "^7.3.8",
-    "template-cli-schematics-sales": "0.1.0",
     "axios": "~0.18.0",
     "commander": "~2.19.0",
     "core-js": "~2.6.3",
