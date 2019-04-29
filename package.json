@@ -1,7 +1,7 @@
 {
-  "name": "template-generate",
-  "version": "0.0.2",
-  "description": "template generate",
+  "name": "template-cli-core",
+  "version": "1.0.0",
+  "description": "template generator",
   "main": "index.js",
   "bin": {
     "tpl": "bin/tpl.js"
@@ -42,6 +42,8 @@
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
     "@schematics/angular": "^7.3.8",
+    "api-service-generator": "^1.5.2",
+    "bgx-cli": "0.0.6",
     "commander": "~2.19.0",
     "core-js": "~2.6.3",
     "fs-extra": "~7.0.1",

@@ -1,7 +1,9 @@
-import program from 'commander';
 // tslint:disable-next-line
 import 'core-js/es7/array';
-import { generate } from './generate';
+import program from 'commander';
+import { generateAPI } from './command/api';
+import { generate } from './command/generate';
+import { generateProject } from './command/project';
 
 
 program
@@ -14,5 +16,20 @@ program
   .description('生成一个新模块或组件')
   .action(generate);
 
+program
+  .command('project')
+  .alias('p')
+  .description('生成一个新项目')
+  .action(generateProject);
+
+program
+  .command('api')
+  .alias('a')
+  .description('生成项目接口和数据实体')
+  .action(generateAPI);
+
 program.parse(process.argv);
 
+if (!program.args.length) {
+  program.help();
+}
