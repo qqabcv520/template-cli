@@ -3,7 +3,6 @@ import { NodeJsSyncHost } from '@angular-devkit/core/node';
 import { NodeWorkflow } from '@angular-devkit/schematics/tools';
 import { readdir } from 'fs-extra';
 import { prompt } from 'inquirer';
-import ora from 'ora';
 import * as path from 'path';
 import { asyncPipe, findUp, findWorkspaceRoot } from '../utils/utils';
 import { chooseTemplate, createCollection, generateFile, JsonSchema, pluginPrefix, questionFromSchema, Template } from '../utils/common';
@@ -59,8 +58,6 @@ export function loadTemplates(
   });
 }
 
-
-
 // 显示模板的定制选项
 export async function templateOption(template: Template): Promise<{ template: Template; option: any }> {
   const asnwer = await questionFromSchema(template.schemaJson);
@@ -70,10 +67,6 @@ export async function templateOption(template: Template): Promise<{ template: Te
   };
   return {template, option};
 }
-
-
-
-
 
 // 加载插件
 export async function loadPlugins() {
@@ -88,7 +81,6 @@ export async function loadPlugins() {
   }
   return plugins;
 }
-
 
 // 选择类型
 async function choosePlugin(): Promise<string> {
