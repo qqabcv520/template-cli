@@ -3,7 +3,7 @@
 
 ## 安装
 ```bash
-npm i template-cli-core # npm安装
+npm i template-cli-core -g # npm安装
 
 yarn global add template-cli-core # yarn安装
 ```
