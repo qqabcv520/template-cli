@@ -1,6 +1,6 @@
 {
   "name": "template-cli-core",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "template generator",
   "main": "index.js",
   "bin": {
@@ -42,7 +42,7 @@
     "@angular-devkit/core": "^7.3.8",
     "@angular-devkit/schematics": "^7.3.8",
     "@schematics/angular": "^7.3.8",
-    "api-service-generator": "^1.5.2",
+    "api-service-generator": "^1.5.4",
     "bgx-cli": "0.0.8",
     "commander": "~2.19.0",
     "core-js": "~2.6.3",
