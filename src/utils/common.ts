@@ -132,7 +132,7 @@ export async function chooseTemplate(templates: Template[]) {
     type: 'list',
     name: 'templateName',
     message: '请选择需要生成的模板',
-    choices: templates.map(value => `${value.name}: ${value.description}`),
+    choices: templates.map(value => `[${value.name}]: ${value.description}`),
   });
   return templates.find(value => value.description === templateName);
 }
