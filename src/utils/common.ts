@@ -30,6 +30,7 @@ export interface JsonSchema extends JsonObject {
 export interface Template {
   pluginName: string;
   name: string;
+  description: string;
   run: (option: any) => Promise<void>;
   schemaJson: JsonSchema;
 }
@@ -131,7 +132,7 @@ export async function chooseTemplate(templates: Template[]) {
     type: 'list',
     name: 'templateName',
     message: '请选择需要生成的模板',
-    choices: templates.map(value => value.name),
+    choices: templates.map(value => `${value.name}: ${value.description}`),
   });
-  return templates.find(value => value.name === templateName);
+  return templates.find(value => value.description === templateName);
 }

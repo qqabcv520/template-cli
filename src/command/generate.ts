@@ -45,12 +45,14 @@ export function loadTemplates(
     })
     .filter(value => value);
   return collections.flatMap(value => {
+
     return value.listSchematicNames()
       .map(val => value.createSchematic(val))
       .map(val => {
         return {
           pluginName: value.description.name,
           name: val.description.name,
+          description: val.description.description,
           run: async (option: any) => await runSchematic(val.collection.description.name, val.description.name, option),
           schemaJson: val.description.schemaJson as JsonSchema,
         };

@@ -164,10 +164,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-api-service-generator@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.npmjs.org/api-service-generator/-/api-service-generator-1.5.2.tgz#e9f0caa8ccc29d938f5950ac5806d9e2928d0404"
-  integrity sha512-ptIkTXyKsMjqOtYvi2fOz4hsoeoDzzw1V3RLqe3782O+uFsUOTK+9+gYMvwvYc2Ih5t730UjrcnSwlrwos5YSw==
+api-service-generator@~1.5.7:
+  version "1.5.7"
+  resolved "https://registry.npmjs.org/api-service-generator/-/api-service-generator-1.5.7.tgz#1e8497991cbde9b21f904d9ea4d319da927ebb14"
+  integrity sha512-atkjOV0fbwbBaEA0e3Y28/aWdMAdrhSwnxPOVLVmz5t6aYO3dG5C5yEms2d5QMO24zZ8dqNzrOtLbZzREfdy2A==
   dependencies:
     axios "^0.18.0"
     commander "^2.20.0"
