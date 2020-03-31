@@ -1,11 +1,20 @@
 # template-cli
 命令行模板生成
 
+## 开发
+
+- `git clone`克隆代码到本地
+
+- `npm i`安装依赖
+
+- 开发完成后，`npm run build`打包
+
+- `npm publish`发布到npm仓库
+
 ## 安装
 ```bash
 npm i template-cli-core -g # npm安装
 
-yarn global add template-cli-core # yarn安装
 ```
 
 ## 生成项目
@@ -29,6 +38,7 @@ tpl p # 简写
 
   tpl g # 简写
   ```
+- 根据命令选择需要生成的组件并初始化组件参数
 
 ## 生成接口
 
