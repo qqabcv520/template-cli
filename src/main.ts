@@ -1,10 +1,10 @@
-// tslint:disable-next-line
-import 'core-js/es7/array';
-import program from 'commander';
 import { generateAPI } from './command/api';
 import { generate } from './command/generate';
 import { generateProject } from './command/project';
 
+const program = require('commander');
+// tslint:disable-next-line
+require('core-js/es7/array');
 
 program
   .version(require('../package.json').version, '-v, --version')  // tslint:disable-line
