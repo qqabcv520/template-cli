@@ -13,19 +13,19 @@ program
 program
   .command('generate')
   .alias('g')
-  .description('生成一个新模块或组件1')
+  .description('生成一个新模块或组件')
   .action(generate);
 
 program
   .command('project')
   .alias('p')
-  .description('生成一个新项目2')
+  .description('生成一个新项目')
   .action(generateProject);
 
 program
   .command('api')
   .alias('a')
-  .description('生成项目接口和数据实体3')
+  .description('生成项目接口和数据实体')
   .action(generateAPI);
 
 program.parse(process.argv);

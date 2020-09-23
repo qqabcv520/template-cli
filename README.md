@@ -44,7 +44,31 @@ tpl p # 简写
 
 - 安装需要使用的模板package
 
-  [接口生成配置文件(待完善)](#)
+    ```javascript
+    module.exports = {
+        path: './api', //生成后保存路径
+        serviceTemplatePath: './template/service.js', // 接口模板
+        entityTemplatePath: './template/entity.js', // 实体模板
+        include: [
+            {path: '/user/**'},
+            {path: '/test/**', methods: ['get']},
+        ], // 需要生成的接口
+        exclude: [
+        //     {path: '**', methods: ['delete', 'put', 'options', 'patch', 'head']},
+        //     {path: '/error'},
+        ], // 排除需要生成的接口，会覆盖include配置
+        projects: [
+            {
+                url: 'http://192.168.1.146:8520/v2/api-docs', // swagger地址
+                data: { // 接口信息，可在模板中获取
+                    baseUrl: 'common',
+                    prefix: 'abc'
+                }
+            },
+        ],
+        assetsPath: './template/assets', // 需要直接生成的资源文件
+    };
+    ```
 
 - 执行生成命令
 
