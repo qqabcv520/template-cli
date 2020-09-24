@@ -29,8 +29,6 @@ tpl p # 简写
 
 - 安装需要使用的模板package
 
-  [模板开发指南(待完善)](#)
-
 - 执行生成命令
 
   ```bash
@@ -39,6 +37,8 @@ tpl p # 简写
   tpl g # 简写
   ```
 - 根据命令选择需要生成的组件并初始化组件参数
+
+- 模板可直接使用angular schematics，但需要将package前缀命名为`template-cli-schematics-`
 
 ## 生成接口
 
