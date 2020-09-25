@@ -62,9 +62,9 @@ export function loadTemplates(
 
 // 显示模板的定制选项
 export async function templateOption(template: Template): Promise<{ template: Template; option: any }> {
-  const asnwer = await questionFromSchema(template.schemaJson);
+  const answer = await questionFromSchema(template.schemaJson);
   const option = {
-    ...asnwer,
+    ...answer,
     __workPath: normalize(path.relative(findWorkspaceRoot(workPath), workPath)),
   };
   return {template, option};

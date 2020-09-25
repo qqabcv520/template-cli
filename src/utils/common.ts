@@ -3,7 +3,7 @@ import { JsonObject, normalize, virtualFs } from '@angular-devkit/core';
 import { NodeJsSyncHost } from '@angular-devkit/core/node';
 import { SchematicEngine } from '@angular-devkit/schematics';
 import { FileSystemEngineHost, NodeModulesEngineHost, NodeWorkflow } from '@angular-devkit/schematics/tools';
-import { prompt } from 'inquirer';
+import { prompt, Question, Questions } from 'inquirer';
 import { findWorkspaceRoot } from './utils';
 import ora from 'ora';
 
@@ -35,9 +35,6 @@ export interface Template {
   schemaJson: JsonSchema;
 }
 
-export interface Project {
-  name: string;
-}
 
 
 // 根据collection插件的包名生成collection
@@ -71,22 +68,29 @@ export async function questionFromSchema(json: JsonSchema) {
     .map(value => ({key: value[0], ...value[1]}))
     .filter(value => json.required.includes(value.key));
 
-  const requiredQuestion = requiredProperties
-    .filter(value => value.type !== 'boolean')
-    .map(value => {
-      return {
-        type: value.type === 'number' ? 'number'
-          : value.enum ? 'list'
-            : 'input',
-        name: value.key,
-        message: value['x-prompt'] || value.description,
-        choices: value.enum,
-        default: value.default,
-      };
+  const notBooleanProperties = requiredProperties.filter(value => value.type !== 'boolean');
+  const booleanProperties = requiredProperties.filter(value => value.type === 'boolean');
+
+  const requiredQuestion = notBooleanProperties.map<Question>(value => {
+      if (value.enum) {
+        return  {
+          type: 'list',
+          name: value.key,
+          message: value['x-prompt'] || value.description,
+          choices: value.enum,
+          default: value.default,
+        };
+      } else {
+        return  {
+          type: 'input',
+          name: value.key,
+          message: value['x-prompt'] || value.description,
+          default: value.default,
+        };
+      }
     });
   // 将boolean型合并到一个checkbox
-  const booleanProperties = requiredProperties.filter(value => value.type === 'boolean');
-  const checkboxQuestion = {
+  const checkboxQuestion: Question = {
     type: 'checkbox',
     name: '__booleanQuestion', // 防止重名
     message: '可选项',
@@ -98,7 +102,7 @@ export async function questionFromSchema(json: JsonSchema) {
       };
     }),
   };
-  const question = [
+  const question: Questions = [
     ...requiredQuestion,
     ...checkboxQuestion.choices.length > 1 ? [checkboxQuestion] : [], // checkboxQuestion为空就不需要提问了
   ];
