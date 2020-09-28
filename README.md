@@ -1,16 +1,6 @@
 # template-cli
 命令行模板生成
 
-## 开发
-
-- `git clone`克隆代码到本地
-
-- `npm i`安装依赖
-
-- 开发完成后，`npm run build`打包
-
-- `npm publish`发布到npm仓库
-
 ## 安装
 ```bash
 npm i template-cli-core -g # npm安装
@@ -44,6 +34,8 @@ tpl p # 简写
 
 - 安装需要使用的模板package
 
+- 在项目根目录下创建如下`generate.conf.js`配置文件
+
     ```javascript
     module.exports = {
         path: './api', //生成后保存路径
@@ -62,7 +54,7 @@ tpl p # 简写
                 url: 'http://192.168.1.146:8520/v2/api-docs', // swagger地址
                 data: { // 接口信息，可在模板中获取
                     baseUrl: 'common',
-                    prefix: 'abc'
+                    prefix: ''
                 }
             },
         ],
@@ -79,3 +71,12 @@ tpl p # 简写
   ```
 
 
+## 开发
+
+- `git clone`克隆代码到本地
+
+- `npm i`安装依赖
+
+- 开发完成后，`npm run build`打包
+
+- `npm publish`发布到npm仓库
