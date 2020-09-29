@@ -32,8 +32,6 @@ tpl p # 简写
 
 ## 生成接口
 
-- 安装需要使用的模板package
-
 - 在项目根目录下创建如下`generate.conf.js`配置文件
 
     ```javascript
@@ -62,6 +60,8 @@ tpl p # 简写
     };
     ```
 
+    模板可参考`node_modules/api-service-generator/template`路径下的`entity.js`和`service.js`，模板语法采用`mustache`
+    
 - 执行生成命令
 
   ```bash
